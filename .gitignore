@@ -1,0 +1,17 @@
+/node_modules/*
+/node_modules/
+/test/output-chromium
+/test/output-firefox
+/test/test-user-data-dir*
+/.local-chromium/
+/.dev_profile*
+.DS_Store
+*.swp
+*.pyc
+.vscode
+yarn.lock
+/node6
+/lib/protocol.d.ts
+/utils/browser/puppeteer-web.js
+/index.d.ts
+/node_modules/puppeteer/.local-chromium/win64-722234/chrome-win/interactive_ui_tests.exe
