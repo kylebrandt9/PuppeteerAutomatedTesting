@@ -1,5 +1,8 @@
 const puppeteer = require('puppeteer');
 const expect = require('chai').expect;
+const config = require('../lib/config'); // Pulls in Config File
+const click = require('../lib/helpers').click;
+const typeText = require('../lib/helpers').typeText;
 
 describe('my first puppeteer test', () => {
 	let browser;
@@ -7,18 +10,18 @@ describe('my first puppeteer test', () => {
 
 	before(async function() {
 		browser = await puppeteer.launch({
-			headless: true, // Run Headless
-			slowMo: 0, // Time between actions
-			devtools: false, // No devtools open
-			timeout: 10000, // 10 seconds
+			headless: config.isHeadless, // true Run Headless
+			slowMo: config.slowMo, // 0 Time between actions
+			devtools: config.isDevTools, //  false No devtools open
+			timeout: config.launchTimeout, // 10000 is 10 seconds
 		});
 
 		page = await browser.newPage(); // Creates a new page
-		await page.setDefaultTimeout(10000); //Industry Standers for Puppeteer Testing Timeout
+		await page.setDefaultTimeout(config.waitTimeout); // 10000 Industry Standers for Puppeteer Testing Timeout
 		await page.setViewport({
 			//sets the page size
-			width: 800,
-			height: 600,
+			width: config.viewPortWidth,
+			height: config.viewPortHeight,
 		});
 	});
 
@@ -27,7 +30,8 @@ describe('my first puppeteer test', () => {
 	});
 
 	it('My First test step', async () => {
-		await page.goto('https://dev.to/'); // opens a new Page
+		//await page.goto('https://dev.to/'); // opens a new Page
+		await page.goto(config.baseUrl); // Pulls in from config file
 		await page.waitForSelector('#nav-search'); // waits for that ID selector
 
 		const url = await page.url();
@@ -52,20 +56,25 @@ describe('my first puppeteer test', () => {
 
 	it('Click Method', async () => {
 		await page.goto('https://dev.to/'); // opens a new Page
-		await page.waitForSelector('#write-link'); // waits for that ID selector
+		await click(page, '#write-link'); // This uses the click.helpers.js file
+
+		//await page.waitForSelector('#write-link'); // waits for that ID selector Solved with Click Function
 		//await page.click('#write-link');  // This is how to use defualt setttings
-		await page.click('#write-link', {
+		/*await page.click('#write-link', {
 			button: 'left', // Left is default, Middle, Right
 			clickCount: 1, // 1 is defualt, but you can set it to as many
 			delay: 2, // 0 is default you can set it to as many
-		});
+		})*/
 		await page.waitForSelector('.registration-rainbow'); // waits for that ID selector
 	});
 
 	it('Submit SearchBox', async () => {
 		await page.goto('https://dev.to/'); // opens a new Page
-		await page.waitForSelector('#nav-search'); // waits for that ID selector
-		await page.type('#nav-search', 'Javascript'); //How to type in the browser
+		//These two lines get done by using the helper file
+		//await page.waitForSelector('#nav-search'); // waits for that ID selector
+		//await page.type('#nav-search', 'Javascript'); //How to type in the browser
+		await typeText(page, 'Javascript', '#nav-search');
+
 		await page.keyboard.press('Enter'); // to press a Keyboard button
 		await page.waitForSelector('#articles-list'); // waits for that ID selector
 	});
