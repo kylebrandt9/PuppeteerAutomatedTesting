@@ -3,6 +3,10 @@ const expect = require('chai').expect;
 const config = require('../lib/config'); // Pulls in Config File
 const click = require('../lib/helpers').click;
 const typeText = require('../lib/helpers').typeText;
+const loadUrl = require('../lib/helpers').loadUrl;
+const waitForText = require('../lib/helpers').waitForText;
+const pressKey = require('../lib/helpers').pressKey;
+const shouldExist = require('../lib/helpers').shouldExist;
 
 describe('my first puppeteer test', () => {
 	let browser;
@@ -31,8 +35,10 @@ describe('my first puppeteer test', () => {
 
 	it('My First test step', async () => {
 		//await page.goto('https://dev.to/'); // opens a new Page
-		await page.goto(config.baseUrl); // Pulls in from config file
-		await page.waitForSelector('#nav-search'); // waits for that ID selector
+		//await page.goto(config.baseUrl); // Pulls in from config file
+		await loadUrl(page, config.baseUrl);
+		//await page.waitForSelector('#nav-search'); // waits for that ID selector
+		await shouldExist(page, '#nav-search');
 
 		const url = await page.url();
 		const title = await page.title();
@@ -43,7 +49,10 @@ describe('my first puppeteer test', () => {
 
 	it('Browser reload', async () => {
 		await page.reload(); // Reloads the page
-		await page.waitForSelector('#page-content');
+		//await page.waitForSelector('#page-content');
+		await shouldExist(page, '#page-content');
+
+		await waitForText(page, 'body', 'WRITE A POST');
 
 		const url = await page.url(); // grabs the URL of the site
 		const title = await page.title(); // grabs the title
@@ -55,7 +64,8 @@ describe('my first puppeteer test', () => {
 	});
 
 	it('Click Method', async () => {
-		await page.goto('https://dev.to/'); // opens a new Page
+		await loadUrl(page, config.baseUrl);
+		//await page.goto('https://dev.to/'); // opens a new Page
 		await click(page, '#write-link'); // This uses the click.helpers.js file
 
 		//await page.waitForSelector('#write-link'); // waits for that ID selector Solved with Click Function
@@ -65,17 +75,20 @@ describe('my first puppeteer test', () => {
 			clickCount: 1, // 1 is defualt, but you can set it to as many
 			delay: 2, // 0 is default you can set it to as many
 		})*/
-		await page.waitForSelector('.registration-rainbow'); // waits for that ID selector
+		//await page.waitForSelector('.registration-rainbow'); // waits for that ID selector
+		await shouldExist(page, '.registration-rainbow');
 	});
 
 	it('Submit SearchBox', async () => {
-		await page.goto('https://dev.to/'); // opens a new Page
+		//await page.goto('https://dev.to/'); // opens a new Page
+		await loadUrl(page, config.baseUrl);
 		//These two lines get done by using the helper file
 		//await page.waitForSelector('#nav-search'); // waits for that ID selector
 		//await page.type('#nav-search', 'Javascript'); //How to type in the browser
 		await typeText(page, 'Javascript', '#nav-search');
-
-		await page.keyboard.press('Enter'); // to press a Keyboard button
-		await page.waitForSelector('#articles-list'); // waits for that ID selector
+		//await page.keyboard.press('Enter'); // to press a Keyboard button
+		await pressKey(page, 'Enter');
+		//await page.waitForSelector('#articles-list'); // waits for that ID selector
+		await shouldExist(page, '#articles-list');
 	});
 });
