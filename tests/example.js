@@ -7,6 +7,7 @@ const loadUrl = require('../lib/helpers').loadUrl;
 const waitForText = require('../lib/helpers').waitForText;
 const pressKey = require('../lib/helpers').pressKey;
 const shouldExist = require('../lib/helpers').shouldExist;
+const utils = require('../lib/utils');
 
 describe('my first puppeteer test', () => {
 	let browser;
@@ -57,7 +58,7 @@ describe('my first puppeteer test', () => {
 		const url = await page.url(); // grabs the URL of the site
 		const title = await page.title(); // grabs the title
 
-		await page.waitFor(3000); // wait for 3 seconds, not good to do if your doing testing just for some automation
+		//await page.waitFor(3000); // wait for 3 seconds, not good to do if your doing testing just for some automation
 
 		expect(url).to.contain('dev'); // checks to see if URL has the word dev in it
 		expect(title).to.contain('Community'); // checks to see if the title has the word community in it
@@ -85,7 +86,8 @@ describe('my first puppeteer test', () => {
 		//These two lines get done by using the helper file
 		//await page.waitForSelector('#nav-search'); // waits for that ID selector
 		//await page.type('#nav-search', 'Javascript'); //How to type in the browser
-		await typeText(page, 'Javascript', '#nav-search');
+		//await typeText(page, 'Javascript', '#nav-search');
+		await typeText(page, utils.genratedNumbers(), '#nav-search');
 		//await page.keyboard.press('Enter'); // to press a Keyboard button
 		await pressKey(page, 'Enter');
 		//await page.waitForSelector('#articles-list'); // waits for that ID selector
