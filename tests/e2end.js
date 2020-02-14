@@ -1,14 +1,14 @@
-const puppeteer = require('puppeteer');
-const expect = require('chai').expect;
+const puppeteer = require('puppeteer'); // Requires Puppeteer
+const expect = require('chai').expect; // Requires Chai
 const config = require('../lib/config'); // Pulls in Config File
-const click = require('../lib/helpers').click;
-const typeText = require('../lib/helpers').typeText;
-const loadUrl = require('../lib/helpers').loadUrl;
-const waitForText = require('../lib/helpers').waitForText;
-const pressKey = require('../lib/helpers').pressKey;
-const shouldExist = require('../lib/helpers').shouldExist;
-const getCount = require('../lib/helpers').getCount;
-const utils = require('../lib/utils');
+const click = require('../lib/helpers').click; // Pulls in helper files and function
+const typeText = require('../lib/helpers').typeText; // Pulls in helper files and function
+const loadUrl = require('../lib/helpers').loadUrl; // Pulls in helpers file and function
+const waitForText = require('../lib/helpers').waitForText; // Pulls in helper files and function
+const pressKey = require('../lib/helpers').pressKey; // Pulls in helpers file and function
+const shouldExist = require('../lib/helpers').shouldExist; // Pulls in helper files and function
+const getCount = require('../lib/helpers').getCount; // Pulls in helpers file and function
+const utils = require('../lib/utils'); // Pulls in the utitls file
 
 describe('End to End Testing on zero.webappsecurity', () => {
 	let browser;
