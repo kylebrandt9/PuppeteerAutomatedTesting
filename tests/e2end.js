@@ -9,6 +9,8 @@ const pressKey = require('../lib/helpers').pressKey; // Pulls in helpers file an
 const shouldExist = require('../lib/helpers').shouldExist; // Pulls in helper files and function
 const getCount = require('../lib/helpers').getCount; // Pulls in helpers file and function
 const utils = require('../lib/utils'); // Pulls in the utitls file
+const homePage = require('../page-objects/home-page');
+const loginPage = require('../page-objects/login-page');
 
 describe('End to End Testing on zero.webappsecurity', () => {
 	let browser;
@@ -38,33 +40,34 @@ describe('End to End Testing on zero.webappsecurity', () => {
 	describe('Login Test', () => {
 		it('Should navigate to homepage', async () => {
 			await loadUrl(page, 'http://zero.webappsecurity.com/');
-			await shouldExist(page, '#online_banking_features');
+			//await shouldExist(page, '#online_banking_features');
+			await shouldExist(page, homePage.BANKING_FEATURES); //This uses the Page Object  Structure
 		});
 
 		it('Should click on Signin button', async () => {
-			await click(page, '#signin_button');
-			await shouldExist(page, '#login_form');
+			await click(page, homePage.SIGN_IN_BUTTON);
+			await shouldExist(page, loginPage.LOGIN_FORM);
 		});
 
 		it('Should submit login form', async () => {
-			await typeText(page, utils.genratedID(), '#user_login');
-			await typeText(page, utils.genratedNumbers(8), '#user_password');
-			await click(page, '.btn-primary');
+			await typeText(page, utils.genratedID(), loginPage.USER_NAME);
+			await typeText(page, utils.genratedNumbers(8), loginPage.USER_PASSWORD);
+			await click(page, loginPage.SUBMIT_BUTTON);
 		});
 
 		it('Should get Error message', async () => {
 			await waitForText(page, 'body', 'Login and/or password are wrong.');
-			await shouldExist(page, '#login_form');
+			await shouldExist(page, loginPage.LOGIN_FORM);
 		});
 	});
 	describe('E2E Text Searching', () => {
 		it('Should navigate to home page', async () => {
 			await loadUrl(page, 'http://zero.webappsecurity.com/');
-			await shouldExist(page, '#online_banking_features');
+			await shouldExist(page, homePage.BANKING_FEATURES);
 		});
 
 		it('Should submit search phrase', async () => {
-			await typeText(page, 'hello world', '#searchTerm');
+			await typeText(page, 'hello world', homePage.SEARCH_BAR);
 			await pressKey(page, 'Enter');
 		});
 		it('Should display search results', async () => {
@@ -75,7 +78,7 @@ describe('End to End Testing on zero.webappsecurity', () => {
 	describe('E2E NavBar Links', () => {
 		it('Should navigate to home page', async () => {
 			await loadUrl(page, 'http://zero.webappsecurity.com/');
-			await shouldExist(page, '#online_banking_features');
+			await shouldExist(page, homePage.BANKING_FEATURES);
 		});
 		it('Should have correct numbe of links', async () => {
 			//get count of links
@@ -87,10 +90,10 @@ describe('End to End Testing on zero.webappsecurity', () => {
 	describe('E2E Submit FeedBack Form', () => {
 		it('Should navigate to home page', async () => {
 			await loadUrl(page, 'http://zero.webappsecurity.com/');
-			await shouldExist(page, '#online_banking_features');
+			await shouldExist(page, homePage.BANKING_FEATURES);
 		});
 		it('Should click on Feedback Nav', async () => {
-			await click(page, '#feedback');
+			await click(page, homePage.LINK_FEEDBACK);
 			await shouldExist(page, 'form');
 		});
 		it('Should fillout & submit feedback form', async () => {
