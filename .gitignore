@@ -15,3 +15,4 @@ yarn.lock
 /utils/browser/puppeteer-web.js
 /index.d.ts
 /node_modules/puppeteer/.local-chromium/win64-722234/chrome-win/interactive_ui_tests.exe
+/tests-snapshots/__tests__/__image_snapshots__
