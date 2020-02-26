@@ -1,5 +1,8 @@
+//Core Packages
 const puppeteer = require('puppeteer'); // Requires Puppeteer
 const expect = require('chai').expect; // Requires Chai
+
+//Helper Functions
 const config = require('../lib/config'); // Pulls in Config File
 const click = require('../lib/helpers').click; // Pulls in helper files and function
 const typeText = require('../lib/helpers').typeText; // Pulls in helper files and function
@@ -8,9 +11,16 @@ const waitForText = require('../lib/helpers').waitForText; // Pulls in helper fi
 const pressKey = require('../lib/helpers').pressKey; // Pulls in helpers file and function
 const shouldExist = require('../lib/helpers').shouldExist; // Pulls in helper files and function
 const getCount = require('../lib/helpers').getCount; // Pulls in helpers file and function
+
+//Utility Functions
 const utils = require('../lib/utils'); // Pulls in the utitls file
+
+//Pages
 const homePage = require('../page-objects/home-page');
 const loginPage = require('../page-objects/login-page');
+const searchResultsPage = require('../page-objects/searchResults-page');
+const feedbackPage = require('../page-objects/feedback-page');
+const feedbackResultsPage = require('../page-objects/feedbackResults-page');
 
 describe('End to End Testing on zero.webappsecurity', () => {
 	let browser;
@@ -71,8 +81,16 @@ describe('End to End Testing on zero.webappsecurity', () => {
 			await pressKey(page, 'Enter');
 		});
 		it('Should display search results', async () => {
-			await waitForText(page, 'h2', 'Search Results');
-			await waitForText(page, 'body', 'No results were found for the query');
+			await waitForText(
+				page,
+				searchResultsPage.SEARCH_RESULTS_TITLE,
+				'Search Results'
+			);
+			await waitForText(
+				page,
+				searchResultsPage.SEARCH_RESULTS_CONTENT,
+				'No results were found for the query'
+			);
 		});
 	});
 	describe('E2E NavBar Links', () => {
@@ -94,18 +112,22 @@ describe('End to End Testing on zero.webappsecurity', () => {
 		});
 		it('Should click on Feedback Nav', async () => {
 			await click(page, homePage.LINK_FEEDBACK);
-			await shouldExist(page, 'form');
+			await shouldExist(page, feedbackPage.FEEDBACK_FORM);
 		});
 		it('Should fillout & submit feedback form', async () => {
-			await typeText(page, 'John Smith', '#name');
-			await typeText(page, utils.genratedEmail(), '#email');
-			await typeText(page, 'Subject', '#subject');
-			await typeText(page, 'Question Text here', '#comment');
-			await click(page, "input[type='submit']");
+			await typeText(page, 'John Smith', feedbackPage.FORM_NAME);
+			await typeText(page, utils.genratedEmail(), feedbackPage.FORM_EMAIL);
+			await typeText(page, 'Subject', feedbackPage.FORM_SUBJECT);
+			await typeText(page, 'Question Text here', feedbackPage.FORM_COMMENT);
+			await click(page, feedbackPage.FORM_SUBMIT_BUTTON);
 		});
 		it('Should display success message from feeback form', async () => {
-			await shouldExist(page, '#feedback-title');
-			await waitForText(page, 'body', 'Thank you for your comments');
+			await shouldExist(page, feedbackResultsPage.FEEDBACK_RESULTS_TITLE);
+			await waitForText(
+				page,
+				feedbackResultsPage.FEEDBACK_RESULTS_CONTENT,
+				'Thank you for your comments'
+			);
 		});
 	});
 	describe('E2E Forgot Password', () => {
